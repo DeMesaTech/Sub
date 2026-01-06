@@ -1,0 +1,83 @@
+/*.popup {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85); /* dark semi-transparent overlay 
+  backdrop-filter: blur(4px);
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  animation: fadeIn 0.3s ease;
+}
+
+/* --- Popup Box --- 
+.popup-content {
+  position: relative;
+  background: rgba(22, 26, 34, 0.85);
+  color: #f8fafc;
+  padding: 30px 40px;
+  border-radius: 16px;
+  box-shadow: 0 0 25px rgba(56, 189, 248, 0.3); /* soft blue glow 
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+  transform: scale(0.9);
+  animation: popupGrow 0.3s ease forwards;
+  border: 1px solid rgba(56, 189, 248, 0.4);
+}
+
+/* --- Popup Title --- 
+.popup-title {
+  color: #38bdf8;
+  margin-bottom: 0.5rem;
+}
+
+/* --- Message text --- 
+.popup-message {
+  color: #cbd5e1;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+
+/* --- Close Button --- 
+.close-btn {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  color: #94a3b8;
+  font-size: 1.8rem;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.close-btn:hover {
+  color: #38bdf8;
+}
+
+/* --- Animations --- 
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes popupGrow {
+  to { transform: scale(1); }
+}
+
+/* Simple button styling 
+.btn {
+  justify-content: center;
+  background-color: #38bdf8;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.3); /* soft blue glow 
+
+}
+
+.btn:hover {
+  transform: translateY(-5px) scale(1.05);
+  box-shadow: 0 0 35px rgba(56, 189, 248, 0.5); /* intensified glow on hover 
+ 
+}

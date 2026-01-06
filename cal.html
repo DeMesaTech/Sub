@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submeter Calculator</title>
+    <script src="https://cdn.tailwindcss.com"></script>    
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen flex items-center justify-center p-4">
+    <div>
+        <div class="bg-white rounded-2xl shadow-xl p-8">
+            <div class="p-2">
+                <h3>Mother Meter</h3>
+                <div class="flex">
+                    <input
+                    type="number" 
+                    id="mPrevious" 
+                    name="mPrevious" 
+                    required 
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"
+                    placeholder="Previous Reading" style="margin-right: 5px;"
+                    >
+                    <input
+                    type="number" 
+                    id="mPresent" 
+                    name="mPresent" 
+                    required 
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"
+                    placeholder="Present Reading" style="margin-left: 5px;"
+                    >
+                </div>
+            </div>
+            <div class="p-2">
+                <h3>Sub-Meter</h3>
+                <div class="flex">
+                    <input
+                    type="number" 
+                    id="sPrevious" 
+                    name="sPrevious" 
+                    required 
+                    
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"
+                    placeholder="Previous Reading" style="margin-right: 5px;"
+                    >
+                    <input
+                    type="number" 
+                    id="sPresent" 
+                    name="sPresent" 
+                    required 
+                    
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"
+                    placeholder="Present Reading" style="margin-left: 5px;"
+                    >
+                </div>
+            </div>
+            <div class="p-2">
+                <h3>Amount Due</h3>
+                <div class="flex">
+                    <input
+                    type="number" 
+                    id="amount" 
+                    name="amount" 
+                    required
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"
+                    placeholder="Amount Due"
+                    >
+                </div>
+            </div>
+            <div class="p-2">
+                <button 
+                type="button"
+                onclick="calculate(event)"
+                class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-4 rounded-lg transition duration-200 flex items-center justify-center"
+                >
+            Start Calculator
+            </button>    
+            </div>
+            <div class="flex justify-between text-xl font-bold text-gray-800 p-2">
+                <span>Submeter Total:</span>    
+                <span class="text-indigo-600">₱<span id="total">0.00</span></span>
+            </div>
+        </div>
+
+    <!-- Footer -->
+        <div class="text-center mt-8 text-gray-600 text-sm">
+            <p>&copy; Submeter Calculator. All rights reserved.</p>
+        </div>
+    </div>
+
+<script>
+      function calculate() {
+        const mPresent = document.getElementById('mPresent').value;
+        const mPrevious = document.getElementById('mPrevious').value;
+        const sPresent = document.getElementById('sPresent').value;
+        const sPrevious = document.getElementById('sPrevious').value;
+        const amount = document.getElementById('amount').value;
+        const total = document.getElementById('total');
+
+        const motherMeter = mPresent - mPrevious;
+        const Submeter = sPresent - sPrevious;
+        const rate = amount / motherMeter;
+        const totalResult = Submeter * rate;
+        
+        total.textContent = `${totalResult.toFixed(2)}`;
+      }
+    </script>
+</body>
+</html>
