@@ -11,6 +11,7 @@ public class Server {
     public static void main(String[] args) throws IOException {
 
         HttpServer server = HttpServer.create(new InetSocketAddress(8080), 0);
+        
 
         server.createContext("/calculate", new CalculateHandler());
 
@@ -52,6 +53,7 @@ public class Server {
                 response = "Error: " + e.getMessage();
             }
 
+            exchange.getResponseHeaders().add("Access-Control-Allow-Origin", "*");
             exchange.sendResponseHeaders(200, response.getBytes().length);
 
             OutputStream os = exchange.getResponseBody();
