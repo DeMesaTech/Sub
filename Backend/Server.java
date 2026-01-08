@@ -40,13 +40,12 @@ public class Server {
                 double sPres = getParam(query, "sPres");
                 double amount = getParam(query, "amount");
 
-                response =
-                    "Parsed values:\n" +
-                    "mPrev=" + mPrev + "\n" +
-                    "mPres=" + mPres + "\n" +
-                    "sPrev=" + sPrev + "\n" +
-                    "sPres=" + sPres + "\n" +
-                    "amount=" + amount;
+                double motherUsage = mPres - mPrev;
+                double submeterUsage = sPres - sPrev;
+                double rate = amount / motherUsage;
+                double total = submeterUsage * rate;
+
+                response = "Submeter Total: " + String.format("%.2f", total);
 
             } catch (Exception e) {
                 statusCode = 400;

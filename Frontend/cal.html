@@ -4,10 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Submeter Calculator</title>
-    <script src="public/tailwind-3.4.17.js"></script>    
+    <script src="https://cdn.tailwindcss.com"></script>    
 </head>
 <body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen flex items-center justify-center p-4">
     <div>
+        <!--form box-->
         <div class="bg-white rounded-2xl shadow-xl p-8">
             <!--MOTHER METER INPUT-->
             <div class="p-2">
@@ -70,16 +71,7 @@
                 </div>
             </div>
             <!--BUTTON-->
-            <div class="p-2">
-                <button 
-                type="button"
-                onclick="calculate(event)"
-                class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-4 rounded-lg transition duration-200 flex items-center justify-center"
-                >
-                Calculate
-                </button>    
-            </div>
-            <!--TOTAL OUTPUT-->
+            <div class="p-2">&
             <div class="flex justify-between text-xl font-bold text-gray-800 p-2">
                 <span>Submeter Total:</span>    
                 <span class="text-indigo-600">₱<span id="total">0.00</span></span>
