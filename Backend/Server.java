@@ -5,6 +5,9 @@ import com.sun.net.httpserver.HttpExchange;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 
 public class Server {
 
@@ -43,6 +46,30 @@ public class Server {
                 double total = submeterUsage * rate;
 
                 responseJson = "{\"total\":" + total + "}";
+
+                Connection conn = DriverManager.getConnection(
+                "jdbc:mysql://localhost:8080/calculate",
+                "root",
+                "password"
+            );
+
+                String sql = """
+                INSERT INTO billing_records
+                (mPrev, mPres, sPrev, sPres, m_kwh, s_kwh, total_bill_amnt, total_bill_amnt)    
+                """;
+
+                PreparedStatement ps =
+                conn.prepareStatement(sql);
+                ps.setDouble(1, mPrev);
+                ps.setDouble(2, mPres);
+                ps.setDouble(3, sPrev);
+                ps.setDouble(4, sPres);
+                ps.setDouble(5, motherUsage);
+                ps.setDouble(6, submeterUsage);
+                ps.setDouble(7, amount);
+                ps.setDouble(8, total);
+
+                ps.executeUpdate();
 
             } catch (Exception e) {
                 statusCode = 400;
