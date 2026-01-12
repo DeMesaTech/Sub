@@ -97,17 +97,21 @@
       function calculate() {
 
         const data = {
-            mPrev: Number(mPrev.value),
-            mPres: Number(mPres.value),
-            sPrev: Number(sPrev.value),
-            sPres: Number(sPres.value),
-            amount: Number(amount.value),
+            mPrev: Number(mPrevious.value),
+            mPres: Number(mPresent.value),
+            sPrev: Number(sPrevious.value),
+            sPres: Number(sPresent.value),
+            amount: Number(amount.value)
         };
+
+        // const mPres = document.getElementById('mPresent').value;
+        // const mPrev = document.getElementById('mPrevious').value;
+        // const sPres = document.getElementById('sPresent').value;
+        // const sPrev = document.getElementById('sPrevious').value;
+        // const amount = document.getElementById('amount').value;
+        // const total = document.getElementById('total');
         
-        const url = `http://localhost:8080/calculate?` +
-              `mPrev=${mPrev}&mPres=${mPres}` +
-              `&sPrev=${sPrev}&sPres=${sPres}` +
-              `&amount=${amount}`;
+        const url = "http://localhost:8080/calculate";
 
   fetch(url, {
     method: "POST",
