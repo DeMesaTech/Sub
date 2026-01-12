@@ -25,42 +25,41 @@ public class Server {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
 
-            String response;
+            String responseJson;
             int statusCode = 200;
 
             try {
-                String query = exchange.getRequestURI().getQuery();
+                String body = new String(exchange.getRequestBody().readAllBytes());
 
-                if (query == null) {
-                    throw new IllegalArgumentException("No query parameters provided");
-                }
-
-                double mPrev = getParam(query, "mPrev");
-                double mPres = getParam(query, "mPres");
-                double sPrev = getParam(query, "sPrev");
-                double sPres = getParam(query, "sPres");
-                double amount = getParam(query, "amount");
+                double mPrev = getJsonValue(body, "mPrev");
+                double mPres = getJsonValue(body, "mPres");
+                double sPrev = getJsonValue(body, "sPrev");
+                double sPres = getJsonValue(body, "sPres");
+                double amount = getJsonValue(body, "amount");
 
                 double motherUsage = mPres - mPrev;
                 double submeterUsage = sPres - sPrev;
                 double rate = amount / motherUsage;
                 double total = submeterUsage * rate;
 
-                response = "Submeter Total: " + String.format("%.2f", total);
+                responseJson = "{\"total\":" + total + "}";
 
             } catch (Exception e) {
                 statusCode = 400;
-                response = "Error: " + e.getMessage();
+                responseJson = "Error: " + e.getMessage();
             }
 
             exchange.getResponseHeaders().add("Access-Control-Allow-Origin", "*");
-            exchange.sendResponseHeaders(200, response.getBytes().length);
+            exchange.getResponseHeaders().add("Content-Type", "application/json");
+            exchange.sendResponseHeaders(200, responseJson.getBytes().length);
+            exchange.getResponseBody().write(responseJson.getBytes());
+            exchange.getResponseBody().close();
 
             OutputStream os = exchange.getResponseBody();
-            os.write(response.getBytes());
+            os.write(responseJson.getBytes());
             os.close();
         }
-
+/*
     private static double getParam(String query, String key) {
         String[] pairs = query.split("&");
 
@@ -72,6 +71,16 @@ public class Server {
         }
 
         throw new IllegalArgumentException("Missing parameter: " + key);
+    } 
+        */
+
+    private static double getJsonValue(String json, String key) {
+        String pattern = "\"" + key + "\":";
+        int start = json.indexOf(pattern) + pattern.length();
+        int end = json.indexOf(",", start);
+        if (end == -1) end = json.indexOf("}", start);
+        return Double.parseDouble(json.substring(start, end).trim());
     }
+
     }
 }
