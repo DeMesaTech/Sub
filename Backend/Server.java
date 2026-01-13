@@ -3,11 +3,11 @@ import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpExchange;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 public class Server {
 
@@ -33,7 +33,7 @@ public class Server {
 
             // Always add CORS headers
             exchange.getResponseHeaders().add("Access-Control-Allow-Origin", "*");
-            exchange.getResponseHeaders().add("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+            exchange.getResponseHeaders().add("Access-Control-Allow-Methods", "GET, POST");
             exchange.getResponseHeaders().add("Access-Control-Allow-Headers", "Content-Type, Authorization");
 
             // Handle preflight OPTIONS request
@@ -50,53 +50,55 @@ public class Server {
                 double mPres = getJsonValue(body, "mPres");
                 double sPrev = getJsonValue(body, "sPrev");
                 double sPres = getJsonValue(body, "sPres");
-                double amount = getJsonValue(body, "amount");
+                double total_bill_amnt = getJsonValue(body, "amount");
 
                 // Your computation logic
-                double motherUsage = mPres - mPrev;
-                double submeterUsage = sPres - sPrev;
-                double rate = amount / motherUsage;
-                double total = submeterUsage * rate;
-
-                // Respond
-                responseJson = "{\"total\":" + total + "}";
+                double m_kwh = mPres - mPrev;
+                double sub_kwh = sPres - sPrev;
+                double rate = total_bill_amnt / m_kwh;
+                double tenant_amnt = sub_kwh * rate;
 
                 // Log to database
                 String sql = """
                 INSERT INTO billing_records
-                (mPrevious, mPresent, sPrevious, sPresent, m_kwh, sub_kwh, total_bill_amnt, total_amnt)  
+                (mPrevious, mPresent, sPrevious, sPresent, m_kwh, sub_kwh, total_bill_amnt, tenant_amnt)  
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)  
                 """;
-                
+
+                Class.forName("org.mariadb.jdbc.Driver");
                 try (
                 Connection conn = DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/subMeter_cal",
-                "root",
-                "password"  
-            );
+                "jdbc:mariadb://localhost:3306/subMeter_cal",
+                "User",
+                "pass143"
+            )){
 
                 PreparedStatement ps =
-                conn.prepareStatement(sql)) {
+                conn.prepareStatement(sql);
                     ps.setDouble(1, mPrev);
                     ps.setDouble(2, mPres);
                     ps.setDouble(3, sPrev);
                     ps.setDouble(4, sPres);
-                    ps.setDouble(5, motherUsage);
-                    ps.setDouble(6, submeterUsage);
-                    ps.setDouble(7, amount);
-                    ps.setDouble(8, total);
+                    ps.setDouble(5, m_kwh);
+                    ps.setDouble(6, sub_kwh);
+                    ps.setDouble(7, total_bill_amnt);
+                    ps.setDouble(8, tenant_amnt);
 
                     ps.executeUpdate();
-                };
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+
                 
+                // Respond
+                responseJson = "{\"total\":" + tenant_amnt + "}";
                 exchange.getResponseHeaders().set("Content-Type", "application/json");
                 byte[] bytes = responseJson.getBytes();
+
                 exchange.sendResponseHeaders(200, bytes.length);
                 exchange.getResponseBody().write(bytes);
 
                 
-                
-
             } catch (Exception e) {
                 statusCode = 400;
                 responseJson = "{\"error\":\"" + e.getMessage() + "\"}";
