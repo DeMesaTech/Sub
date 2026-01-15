@@ -4,9 +4,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Submeter Calculator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>    
+    <link rel="stylesheet" href="tabConcent.css">
+
 </head>
 <body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen flex items-center justify-center p-4">
+    <!-- Record Tables -->
+    <div>
+        <div class="bg-white rounded-2xl shadow-xl p-8">
+            <!-- Tab Links-->
+            <div class="tab">
+                <button class="tablinks" onclick="meterRecord(event, 'MainMeter')" id="defaultOpen">MainMeter</button>
+                <button class="tablinks" onclick="meterRecord(event, 'LandLord')">Landlord</button>
+                <button class="tablinks" onclick="meterRecord(event, 'Tenant')">Tenant</button>
+            </div>
+            <!-- Tab Content -->
+            <div id="MainMeter" class="tabcontent">
+                <h3>Main Meter Records</h3>
+                <p>Content for Main Meter records goes here.</p>
+            </div>  
+            <div id="LandLord" class="tabcontent">
+                <h3>LandLord Records</h3>
+                <p>Content for Main Meter records goes here.</p>
+            </div>  
+            <div id="Tenant" class="tabcontent">
+                <h3>Tenant Records</h3>
+                <p>Content for Main Meter records goes here.</p>
+            </div>  
+        </div>
+    </div>
+<!-- Calculator -->
     <div>
         <!--form box-->
         <div class="bg-white rounded-2xl shadow-xl p-8">
@@ -94,7 +122,24 @@
     </div>
 
 <script>
-      function calculate() {
+    // Get the element with id="defaultOpen" and click on it
+    document.getElementById("defaultOpen").click();
+
+    function meterRecord(evt, Records) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        document.getElementById(Records).style.display = "block";
+        evt.currentTarget.className += " active";
+    }
+
+    function calculate() {
 
         const data = {
             mPrev: Number(mPrevious.value),
