@@ -23,6 +23,20 @@
             <div id="MainMeter" class="tabcontent">
                 <h3>Main Meter Records</h3>
                 <p>Content for Main Meter records goes here.</p>
+                <table class="border=1">
+                    <thead>
+                        <tr>
+                            <th class="border px-4 py-2">Date</th>
+                            <th class="border px-4 py-2">Previous</th>
+                            <th class="border px-4 py-2">Present Reading</th>
+                            <th class="border px-4 py-2">kwh/kw</th>
+                            <th class="border px-4 py-2">Amount Due</th>
+                        </tr>
+                    </thead>
+                    <tbody id="recordsBody">
+                        <!-- Records will be populated here -->
+                    </tbody>
+                </table>
             </div>  
             <div id="LandLord" class="tabcontent">
                 <h3>LandLord Records</h3>
@@ -149,12 +163,6 @@
             amount: Number(amount.value)
 
         };
-
-        // const mPres = document.getElementById('mPresent').value;
-        // const mPrev = document.getElementById('mPrevious').value;
-        // const sPres = document.getElementById('sPresent').value;
-        // const sPrev = document.getElementById('sPrevious').value;
-        // const amount = document.getElementById('amount').value;
         const total = document.getElementById('total');
         
         const url = "http://localhost:8080/calculate";
@@ -175,6 +183,34 @@
             alert("Backend error");
             });
     }
+    // ===== GET Example: retrieve data from backend =====
+    function getData() {
+        fetch("http://localhost:8080/get-data")
+        .then(res => res.text())
+        .then(text => {
+            console.log("Records from backend:", text);
+
+            // Convert text to  JSON
+            const records = JSON.parse(text);
+
+            // Example: render into table
+            const tbody = document.getElementById("recordsBody");
+            tbody.innerHTML = "";
+            records.forEach(r => {
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td>${r.col1}</td>
+                    <td>${r.col2}</td>
+                    <td>${r.col3}</td>
+                    <td>${r.col4}</td>
+                    <td>${r.col5.toFixed(2)}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        })
+        .catch(err => console.error(err));
+    }
+    window.onload = getData;
     </script>
 </body>
 </html>

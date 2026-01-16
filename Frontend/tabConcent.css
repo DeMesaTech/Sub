@@ -36,3 +36,8 @@ body {font-family: Arial;}
   border: 1px solid #ccc;
   border-top: none;
 }
+ #recordsBody td {
+    text-align: center;       /* Horizontal center */
+    vertical-align: middle;   /* Vertical center */
+    padding: 8px;
+  }

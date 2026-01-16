@@ -8,7 +8,6 @@ import com.sun.net.httpserver.HttpExchange;
 
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
@@ -26,7 +25,7 @@ import java.sql.ResultSet;
                     Class.forName("org.mariadb.jdbc.Driver");
                     try (Connection conn = DBConnection.getConnection()) {
                         String mainMeter = """
-                                SELECT mPrevious, mPresent, (mPrevious-mPresent) AS m_kwh, total_bill_amnt FROM billing_records;
+                                SELECT create_at, mPrevious, mPresent, (mPresent-mPrevious) AS m_kwh, total_bill_amnt FROM billing_records;
                         """;
 
                         PreparedStatement ps = conn.prepareStatement(mainMeter);
@@ -37,8 +36,11 @@ import java.sql.ResultSet;
                         while (rs.next()) {
                             if (!first) json.append(",");
                             json.append("{")
-                                    .append("\"col1\":\"").append(rs.getString("col1")).append("\",")
-                                    .append("\"col2\":").append(rs.getDouble("col2"))
+                                    .append("\"col1\":\"").append(rs.getString("create_at")).append("\",")
+                                    .append("\"col2\":").append(rs.getDouble("mPrevious")).append(",")
+                                    .append("\"col3\":").append(rs.getDouble("mPresent")).append(",")
+                                    .append("\"col4\":").append(rs.getDouble("m_kwh")).append(",")
+                                    .append("\"col5\":").append(rs.getDouble("total_bill_amnt"))
                                     .append("}");
                             first = false;
                         }

@@ -23,7 +23,7 @@ public class Server {
 
         // ======== REST Endpoints ========
         server.createContext("/calculate", new InsertDataHandler());
-        // server.createContext("/get-data", new GetDataHandler());
+        server.createContext("/get-data", new GetDataHandler());
 
         // Default executor
         server.setExecutor(null);
