@@ -26,8 +26,8 @@ import java.sql.ResultSet;
                     Class.forName("org.mariadb.jdbc.Driver");
                     try (Connection conn = DBConnection.getConnection()) {
                         String mainMeter = """
-                                SELECT mPrevious, mPresent, (mPrevious-mPresent) AS m_kwh, total_bill_amnt
-                        """
+                                SELECT mPrevious, mPresent, (mPrevious-mPresent) AS m_kwh, total_bill_amnt FROM billing_records;
+                        """;
 
                         PreparedStatement ps = conn.prepareStatement(mainMeter);
                         ResultSet rs = ps.executeQuery();
